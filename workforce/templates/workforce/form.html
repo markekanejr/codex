@@ -1,0 +1,3 @@
+{% extends "workforce/base.html" %}
+{% block content %}<h1>{{ heading }}</h1>{% if description %}<p>{{ description }}</p>{% endif %}
+<form method="post" class="card">{% csrf_token %}{{ form.as_p }}<button>Save</button></form>{% endblock %}

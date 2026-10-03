@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    env_file: .db.env
+    ports:
+      - "127.0.0.1:54328:5432"
+    volumes:
+      - workforce_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U workforce -d workforce"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+volumes:
+  workforce_pg:

@@ -1,0 +1,7 @@
+{% extends "workforce/base.html" %}
+{% block content %}<h1>Your household settings.</h1>
+<section class="card"><h2>{{ member.household.name }}</h2><p>Morning overview: {{ member.household.briefing_time }} · {{ member.household.timezone }}</p><p>Delivery is preview only. Nothing is emailed or purchased.</p>
+<p><a href="{% url 'budget_settings' %}">Tools budget and routine approval rules</a></p>
+<form method="post">{% csrf_token %}<input type="hidden" name="operation" value="pause"><button>{% if member.household.pause_outbound %}Resume previews{% else %}Pause scheduled previews{% endif %}</button></form></section>
+{% if member.role == "owner" %}<section class="card"><h2>Invite your partner</h2><form method="post">{% csrf_token %}<input type="hidden" name="operation" value="invite"><label for="email">Partner email</label><input type="email" id="email" name="email" required><button>Create private invitation</button></form>{% if invite_url %}<p>Share this single-use link privately. It expires in 24 hours.</p><p><a href="{{ invite_url }}">{{ invite_url }}</a></p>{% endif %}</section>{% endif %}
+{% endblock %}

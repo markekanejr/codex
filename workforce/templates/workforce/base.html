@@ -1,0 +1,23 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Personal workforce{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'workforce/app.css' %}">
+</head>
+<body>
+<header><a class="brand" href="{% url 'today' %}">Personal workforce</a>
+{% if user.is_authenticated %}<form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="quiet">Sign out</button></form>{% endif %}
+</header>
+<main>
+{% if user.is_authenticated %}
+<nav aria-label="Main navigation"><a href="{% url 'today' %}">Today</a><a href="{% url 'plans' %}">Plans</a><a href="{% url 'trips' %}">Trips</a><a href="{% url 'briefing' %}">Overview</a><a href="{% url 'review' %}">Review</a><a href="{% url 'household_settings' %}">Settings</a></nav>
+{% endif %}
+{% for message in messages %}<p class="notice" role="status">{{ message }}</p>{% endfor %}
+{% block content %}{% endblock %}
+</main>
+<footer>Preview delivery · Your information stays in this application.</footer>
+</body>
+</html>

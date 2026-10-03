@@ -1,0 +1,5 @@
+{% extends "workforce/base.html" %}
+{% block content %}<h1>{{ trip.title }}</h1><p>{{ trip.get_status_display }} · {{ trip.get_audience_display }}</p>
+{% if trip.owner_id == user.id %}<a class="button" href="{% url 'trip_edit' trip.pk %}">Edit trip</a> <a class="button quiet" href="{% url 'segment_new' trip.pk %}">Add flight or hotel</a>{% endif %}
+{% if trip.missing_details %}<p class="notice">Still to confirm: {{ trip.missing_details|join:", " }}. Departure reminders wait for confirmed details.</p>{% endif %}
+{% for segment in segments %}<article class="card"><h2>{{ segment.label }}</h2><p>{{ segment.get_kind_display }} · {{ segment.get_verification_display }}</p><p>{{ segment.origin }} → {{ segment.destination }}</p><p>{{ segment.start_at|default:"Departure/start time unknown" }} — {{ segment.end_at|default:"Arrival/end time unknown" }}</p>{% if trip.owner_id == user.id %}<a href="{% url 'segment_edit' trip.pk segment.pk %}">Edit details</a>{% endif %}</article>{% endfor %}{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "workforce/base.html" %}
+{% block content %}<h1>Room in the budget.</h1><p>Count existing subscriptions alongside new services. Chat subscriptions and automated API usage are billed separately.</p>
+<p class="notice">{% if known %}Available usage allowance: {{ remaining }} USD.{% else %}Costs are incomplete. Confirm all existing charges before enabling paid usage.{% endif %} Paid AI remains disabled in this build.</p>
+{% if member.pricing_approver %}<section class="card"><h2>Limits</h2><form method="post">{% csrf_token %}<input type="hidden" name="operation" value="budget">{{ form.as_p }}<button>Save limits</button></form></section>{% endif %}
+<section class="card"><h2>Existing commitments</h2>{% for item in commitments %}<p>{{ item.label }} · {% if item.monthly_cents == None %}Cost unknown{% else %}{{ item.monthly_display }} USD/month{% endif %}</p>{% if member.pricing_approver %}<form method="post">{% csrf_token %}<input type="hidden" name="operation" value="remove_commitment"><input type="hidden" name="id" value="{{ item.pk }}"><button class="quiet">Remove</button></form>{% endif %}{% empty %}<p>No charges recorded yet.</p>{% endfor %}
+{% if member.pricing_approver %}<form method="post">{% csrf_token %}<input type="hidden" name="operation" value="commitment">{{ commitment_form.as_p }}<button>Add commitment</button></form>{% endif %}</section>
+<section class="card"><h2>My routine permissions</h2><p>These rules apply to your own commitments with the named vendor. Price limits and confirmed availability still apply.</p>
+{% for policy in policies %}<p>{{ policy.workflow }} · {{ policy.vendor }} · {% if policy.enabled %}Enabled{% else %}Disabled{% endif %}</p>{% endfor %}
+<form method="post">{% csrf_token %}<input type="hidden" name="operation" value="policy">{{ policy_form.as_p }}<button>Save routine rule</button></form></section>{% endblock %}

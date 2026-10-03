@@ -1,0 +1,3 @@
+{% extends "workforce/base.html" %}
+{% block content %}<h1>Your next adventures.</h1><a class="button" href="{% url 'trip_new' %}">Add a trip</a>
+{% for trip in trips %}<article class="card"><h2><a href="{% url 'trip_detail' trip.pk %}">{{ trip.title }}</a></h2><p>{{ trip.get_status_display }} · {{ trip.get_audience_display }}</p>{% if trip.missing_details %}<p class="muted">Still to confirm: {{ trip.missing_details|join:", " }}.</p>{% endif %}</article>{% empty %}<p>No trips yet.</p>{% endfor %}{% endblock %}

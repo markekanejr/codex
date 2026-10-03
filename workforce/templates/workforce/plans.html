@@ -1,0 +1,8 @@
+{% extends "workforce/base.html" %}
+{% block content %}<h1>Plans, with room to breathe.</h1>
+<a class="button" href="{% url 'plan_new' %}">Add a plan</a> <a class="button quiet" href="{% url 'routine_new' %}">Add a routine</a>
+<div class="grid">
+<section class="card"><h2>Plans</h2>{% for plan in plans %}<p>{{ plan.title }} <span class="badge">{{ plan.get_audience_display }}</span><br>{{ plan.get_status_display }} · {{ plan.start_at|default:"Time not set" }}{% if plan.owner_id == user.id %}<br><a href="{% url 'plan_edit' plan.pk %}">Edit</a>{% endif %}</p>{% empty %}<p>No plans yet.</p>{% endfor %}<a href="{% url 'export_plans' %}">Export your visible plans</a></section>
+<section class="card"><h2>Your rhythms</h2>{% for routine in routines %}<p>{{ routine.title }} · {{ routine.local_time }}<br>{{ routine.get_rule_display }} · {{ routine.get_audience_display }}{% if routine.owner_id == user.id %}<br><a href="{% url 'routine_edit' routine.pk %}">Edit</a>{% endif %}</p>{% empty %}<p>Add the routines you want to make room for.</p>{% endfor %}</section>
+<section class="card"><h2>Personal source notes</h2><a href="{% url 'source_new' %}">Add a source note</a>{% for source in sources %}<p>{{ source.title }} · {{ source.get_provenance_display }}{% if source.owner_id == user.id %}<br><a href="{% url 'source_edit' source.pk %}">Edit</a>{% endif %}</p>{% endfor %}</section>
+</div>{% endblock %}

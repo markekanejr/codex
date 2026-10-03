@@ -1,0 +1,26 @@
+[project]
+name = "personal-workforce"
+version = "0.1.0"
+description = "A household planning and briefing application"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "Django>=5.2,<5.3",
+    "django-environ>=0.12,<0.13",
+    "gunicorn>=23,<24",
+    "psycopg[binary]>=3.2,<4",
+    "whitenoise>=6.9,<7",
+]
+
+[dependency-groups]
+dev = [
+    "playwright>=1.50,<2",
+    "ruff>=0.12,<1",
+]
+
+[tool.ruff]
+line-length = 100
+exclude = ["workforce/migrations"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]

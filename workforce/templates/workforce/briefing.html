@@ -1,0 +1,4 @@
+{% extends "workforce/base.html" %}
+{% block content %}<h1>A calmer start.</h1><p><a href="?scope=shared">Shared household overview</a> · <a href="?scope=private">My private overview</a></p>
+<section class="card"><h2>{{ scope|title }} preview</h2><pre>{{ content }}</pre></section>
+<h2>Your preview history</h2>{% for delivery in history %}<section class="card"><p class="muted">{{ delivery.created_at }} · {{ delivery.status }}</p><pre>{{ delivery.content }}</pre></section>{% empty %}<p>Scheduled previews will appear here once the worker processes them.</p>{% endfor %}{% endblock %}

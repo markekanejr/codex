@@ -1,0 +1,12 @@
+{% extends "workforce/base.html" %}
+{% block content %}
+<p class="eyebrow">Your household, thoughtfully coordinated</p>
+<h1>A little more room for life.</h1>
+{% if needs_household %}<p>Your account needs a household. Ask the administrator to finish account setup.</p>{% else %}
+<p class="muted">{{ household.name }} · Plans you can count on, and room to breathe.</p><a class="button" href="{% url 'plan_new' %}">Add a plan</a>
+<div class="grid"><section class="card"><h2>On your horizon</h2>
+{% for plan in plans %}<p>{{ plan.title }} <span class="badge">{{ plan.get_status_display }}</span><br><span class="muted">{{ plan.start_at|default:plan.due_at|default:"Time not yet set" }} · {{ plan.get_audience_display }}</span>{% if plan.owner_id == user.id %}<br><a href="{% url 'plan_edit' plan.pk %}">Edit</a>{% endif %}</p>{% empty %}<p>No upcoming plans yet. Start with something you’re looking forward to.</p>{% endfor %}
+</section><section class="card"><h2>Travel, with a little less rush</h2>
+{% for trip in trips %}<p><a href="{% url 'trip_detail' trip.pk %}">{{ trip.title }}</a><br>{{ trip.get_status_display }}</p>{% empty %}<p>Your next trip can live here, with bookings and preparation together.</p>{% endfor %}
+</section></div>{% endif %}
+{% endblock %}

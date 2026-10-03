@@ -1,0 +1,15 @@
+.git
+.venv
+.env
+.env.*
+.db.env
+private
+uploads
+exports
+test-results
+staticfiles
+__pycache__
+*.pyc
+.ruff_cache
+.coverage
+htmlcov

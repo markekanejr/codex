@@ -1,0 +1,3 @@
+{% extends "workforce/base.html" %}
+{% block content %}<h1>A few decisions, clearly laid out.</h1><p>Review proposals before they become commitments. Actions are simulated in this build.</p><a class="button" href="{% url 'action_new' %}">Add a proposal</a>
+{% for proposal in proposals %}<article class="card"><h2><a href="{% url 'action_detail' proposal.pk %}">{{ proposal.title }}</a></h2><p>{{ proposal.vendor }} · {{ proposal.status }} · {{ proposal.get_audience_display }}</p></article>{% empty %}<p>No decisions waiting.</p>{% endfor %}{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "workforce/base.html" %}
+{% block content %}<h1>{{ proposal.title }}</h1>
+<section class="card"><p><strong>Vendor:</strong> {{ proposal.vendor }}</p><p><strong>All-in total:</strong> {% if total %}{{ total }} {{ proposal.currency }}{% else %}Unknown{% endif %}</p><p><strong>Terms:</strong> {{ proposal.terms|default:"None supplied" }}</p><p><strong>Requested time:</strong> {{ proposal.requested_at|default:"Not specified" }}</p><p><strong>Quote expiry:</strong> {{ proposal.quote_expires_at|default:"Not set" }}</p><p><strong>Status:</strong> {% if proposal.status == "succeeded" %}Simulated completion{% else %}{{ proposal.status }}{% endif %}</p><p class="notice">{{ reason }}</p>{% if proposal.receipt %}<p>Preview reference: {{ proposal.receipt }}</p>{% endif %}
+{% if proposal.owner_id == user.id %}<a href="{% url 'action_edit' proposal.pk %}">Edit proposal</a>{% endif %}
+<form method="post" action="{% url 'action_decide' proposal.pk %}">{% csrf_token %}<input type="hidden" name="revision" value="{{ proposal.revision }}">
+{% if proposal.status == "draft" or proposal.status == "needs_information" %}{% if proposal.owner_id == user.id %}<button name="operation" value="submit">Check proposal</button>{% endif %}{% endif %}
+{% if proposal.status == "awaiting_approval" and can_approve %}<button name="operation" value="approve">Approve this exact proposal</button>{% endif %}
+{% if proposal.status == "ready" %}<button name="operation" value="queue">Queue simulated action</button>{% endif %}
+{% if proposal.status != "succeeded" and proposal.status != "executing" and proposal.status != "outcome_unknown" %}<button class="quiet" name="operation" value="reject">Reject</button>{% endif %}
+</form></section><p class="muted">No purchase, booking, or provider contact occurs in preview mode.</p>{% endblock %}
