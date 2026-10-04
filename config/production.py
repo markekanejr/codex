@@ -1,5 +1,6 @@
 from django.core.exceptions import ImproperlyConfigured
 
+from .secrets import production_secret
 from .settings import *  # noqa: F403
 from .settings import ALLOWED_HOSTS, DEBUG, SECRET_KEY
 
@@ -13,7 +14,6 @@ STORAGES = {
 
 if DEBUG:
     raise ImproperlyConfigured("Hosted previews require DJANGO_DEBUG=false.")
-if len(SECRET_KEY) < 50 or len(set(SECRET_KEY)) < 5:
-    raise ImproperlyConfigured("Hosted previews require a strong generated secret key.")
+SECRET_KEY = production_secret(SECRET_KEY)
 if not ALLOWED_HOSTS or "*" in ALLOWED_HOSTS:
     raise ImproperlyConfigured("Hosted previews require explicit allowed hostnames.")

@@ -1,4 +1,28 @@
+import secrets
+
+from django.core.exceptions import ImproperlyConfigured
 from django.test import SimpleTestCase, override_settings
+
+from config.secrets import production_secret
+
+
+class ProductionSecretTests(SimpleTestCase):
+    def test_provider_sized_key_has_stable_django_compatible_expansion(self):
+        value = secrets.token_hex(16)
+        result = production_secret(value)
+        self.assertEqual(len(result), 64)
+        self.assertGreaterEqual(len(set(result)), 5)
+        self.assertEqual(result, production_secret(value))
+        self.assertNotEqual(result, production_secret(secrets.token_hex(16)))
+
+    def test_existing_long_key_is_preserved(self):
+        value = secrets.token_urlsafe(64)
+        self.assertEqual(production_secret(value), value)
+
+    def test_short_repeated_and_development_keys_are_rejected(self):
+        for value in ("too-short", "a" * 64, "django-insecure-" + secrets.token_hex(32)):
+            with self.subTest(case=len(value)), self.assertRaises(ImproperlyConfigured):
+                production_secret(value)
 
 
 @override_settings(
